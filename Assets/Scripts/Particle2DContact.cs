@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Particle2DContact : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Particle2D particle1;
+    Particle2D particle2;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public float restitutionCoefficient;
+
+    vector2D vector2D;
+    float penetration;
+    vector2D move;
 }

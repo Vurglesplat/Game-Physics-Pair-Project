@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class ForceGenerator2D : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    //Update the forces
+    void UpdateForce()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

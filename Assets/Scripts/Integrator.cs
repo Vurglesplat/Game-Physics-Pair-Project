@@ -2,17 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Integrator : MonoBehaviour
+public static class Integrator : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    void Integrate()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

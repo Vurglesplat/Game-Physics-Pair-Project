@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class Particle2D : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public float mass;
+    Vector2D velocity;
+    Vector2D acceleration;
+    Vector2D accumulatedForces;
+    float dampingConstant;
 }
