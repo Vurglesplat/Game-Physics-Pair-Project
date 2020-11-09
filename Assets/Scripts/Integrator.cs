@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Integrator : MonoBehaviour
+public static class Integrator
 {
-    void Integrate()
+    static void Integrate()
     {
-
+        ;
     }
 }

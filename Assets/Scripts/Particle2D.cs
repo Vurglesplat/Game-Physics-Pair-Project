@@ -5,8 +5,9 @@ using UnityEngine;
 public class Particle2D : MonoBehaviour
 {
     public float mass;
-    Vector2D velocity;
-    Vector2D acceleration;
-    Vector2D accumulatedForces;
-    float dampingConstant;
+    [Range(0f, 1f)] [SerializeField] float dampingConstant;
+
+    [HideInInspector] public Vector2 velocity;
+    [HideInInspector] public Vector2 acceleration;
+    [HideInInspector] public Vector2 accumulatedForces;
 }

@@ -9,7 +9,7 @@ public class Particle2DContact : MonoBehaviour
 
     public float restitutionCoefficient;
 
-    vector2D vector2D;
+    Vector2 vector2D;
     float penetration;
-    vector2D move;
+    Vector2 move;
 }

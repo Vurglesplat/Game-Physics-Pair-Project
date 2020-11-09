@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class ContactResolver : MonoBehaviour
+public static class ContactResolver
 {
     
 }
