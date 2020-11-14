@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
+    enum WEAPON_TYPES
+    {
+        PISTOL_SHOT,
+    };
 
     [Range(1f, 10f)] [SerializeField] float RotationSpeed;
     
