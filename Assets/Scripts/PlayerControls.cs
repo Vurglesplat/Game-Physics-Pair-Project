@@ -68,9 +68,9 @@ public class PlayerControls : MonoBehaviour
         Particle2D theBulletsParticle2D = theBullet.GetComponent<Particle2D>();
         
         if (!theBulletsParticle2D)
-            Debug.LogError("Didn't get a script frrom the bullet");
+            Debug.LogError("Didn't get a script from the bullet");
 
-        theBulletsParticle2D.velocity = 4f * theBullet.transform.right  ;
-        Debug.Log("" + theBullet.transform.forward);
+        theBulletsParticle2D.velocity = 10f * theBullet.transform.right  ;
+
     }
 }
