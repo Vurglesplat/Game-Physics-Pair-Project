@@ -26,7 +26,7 @@ public class BulletScript : MonoBehaviour
                 }
             }
         }
-        else if (Vector3.Distance(this.transform.position, theTarget.transform.position) < 1.0f)
+        else if (ContactResolver.ContactTest(this.gameObject, theTarget))
         {
             TargetScript theTargetScript = theTarget.GetComponent<TargetScript>();
 
