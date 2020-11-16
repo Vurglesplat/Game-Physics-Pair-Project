@@ -11,14 +11,14 @@ public class Particle2D : MonoBehaviour
     
     [Range(0f, 1f)] [SerializeField] float dampingConstant;
 
-    [HideInInspector]  Vector2 velocity = new Vector2( 0.0f, 0.0f);
+    [HideInInspector] public Vector2 velocity = new Vector2( 0.0f, 0.0f);
     [HideInInspector]  Vector2 acceleration = new Vector2(0.0f, 0.0f);
     [HideInInspector]  Vector2 accumulatedForces = new Vector2(0.0f, 0.0f);
     [HideInInspector]  float inverseMass;
 
     private void Start()
     {
-        velocity.y = -gravity;
+        acceleration.y = -gravity;
         Integrator.addToList(this);
         inverseMass = (1.0f / mass);
     }

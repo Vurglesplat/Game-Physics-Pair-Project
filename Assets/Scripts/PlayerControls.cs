@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
 {
+    [SerializeField] GameObject bulletOnePrefab = null;
+
     enum WEAPON_TYPES
     {
         PISTOL_SHOT,
@@ -59,6 +61,16 @@ public class PlayerControls : MonoBehaviour
 
     void FireWeapon()
     {
-        Debug.Log("firing weapon");
+        Transform currentTransform = this.gameObject.transform;
+        GameObject theBullet = Instantiate(bulletOnePrefab, currentTransform.position, bulletOnePrefab.transform.rotation);
+        theBullet.transform.Rotate(0.0f, currentTransform.eulerAngles.z, 0.0f);
+
+        Particle2D theBulletsParticle2D = theBullet.GetComponent<Particle2D>();
+        
+        if (!theBulletsParticle2D)
+            Debug.LogError("Didn't get a script frrom the bullet");
+
+        theBulletsParticle2D.velocity = 4f * theBullet.transform.right  ;
+        Debug.Log("" + theBullet.transform.forward);
     }
 }
