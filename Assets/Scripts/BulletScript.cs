@@ -35,7 +35,7 @@ public class BulletScript : MonoBehaviour
 
 
             theTargetScript.HandleTargetHit();
-            Integrator.removeUnit(this.gameObject.GetComponent<Particle2D>().partId);
+            Integrator.removeUnit(this.gameObject.GetComponent<Particle2D>().particleId);
         }
     }
 

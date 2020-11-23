@@ -115,8 +115,8 @@ public class PlayerControls : MonoBehaviour
 
                     theBullet.transform.Rotate(0.0f, 0.0f, currentTransform.eulerAngles.z);
 
-                    linkScript.particle1.velocity = bulletTwoForce * theBullet.transform.right;
-                    linkScript.particle2.velocity = bulletTwoForce * theBullet.transform.right;
+                    linkScript.particle1.velocity = bulletThreeForce * theBullet.transform.right;
+                    linkScript.particle2.velocity = bulletThreeForce * theBullet.transform.right;
                     break;
                 }
         }

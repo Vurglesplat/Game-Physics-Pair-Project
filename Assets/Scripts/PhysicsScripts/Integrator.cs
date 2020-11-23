@@ -34,7 +34,7 @@ public static class Integrator
     public static void removeUnit(int unitIdToBeDeleted)
     {
         foreach (Particle2D currentParticle in particleList)
-            if(currentParticle.partId == unitIdToBeDeleted)
+            if(currentParticle.particleId == unitIdToBeDeleted)
             {
                 Particle2D temp = currentParticle;
                 particleList.Remove(currentParticle);

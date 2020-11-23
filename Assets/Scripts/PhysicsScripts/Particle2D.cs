@@ -13,16 +13,16 @@ public class Particle2D : MonoBehaviour
 
     [HideInInspector] public Vector2 velocity = new Vector2( 0.0f, 0.0f);
     [HideInInspector] public Vector2 acceleration = new Vector2(0.0f, 0.0f);
-    public Vector2 accumulatedForces = new Vector2(0.0f, 0.0f);
+    [HideInInspector] public Vector2 accumulatedForces = new Vector2(0.0f, 0.0f);
     [HideInInspector] public float inverseMass;
 
-    [HideInInspector] public int partId = -1;
+    [HideInInspector] public int particleId = -1;
 
     static int nextPartId = 0; 
 
     private void Start()
     {
-        partId = ++nextPartId;
+        particleId = ++nextPartId;
         
         acceleration.y = -gravity;
         Integrator.addToList(this);
