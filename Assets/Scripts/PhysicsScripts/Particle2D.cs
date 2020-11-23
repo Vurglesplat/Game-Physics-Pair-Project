@@ -12,12 +12,18 @@ public class Particle2D : MonoBehaviour
     [Range(0f, 1f)] [SerializeField] float dampingConstant;
 
     [HideInInspector] public Vector2 velocity = new Vector2( 0.0f, 0.0f);
-    [HideInInspector]  Vector2 acceleration = new Vector2(0.0f, 0.0f);
-    [HideInInspector]  Vector2 accumulatedForces = new Vector2(0.0f, 0.0f);
-    [HideInInspector]  float inverseMass;
+    [HideInInspector] public Vector2 acceleration = new Vector2(0.0f, 0.0f);
+    public Vector2 accumulatedForces = new Vector2(0.0f, 0.0f);
+    [HideInInspector] public float inverseMass;
+
+    [HideInInspector] public int partId = -1;
+
+    static int nextPartId = 0; 
 
     private void Start()
     {
+        partId = ++nextPartId;
+        
         acceleration.y = -gravity;
         Integrator.addToList(this);
         inverseMass = (1.0f / mass);
@@ -39,6 +45,10 @@ public class Particle2D : MonoBehaviour
         float damping = (float)Math.Pow(dampingConstant, dt);
         velocity *= damping;
 
-        //clearAccumulatedForces((PhysicsDataPtr)pData);
+        accumulatedForces = new Vector2(0.0f, 0.0f);
+    }
+    public void DestroySelf()
+    {
+        Destroy(this.gameObject);
     }
 }
