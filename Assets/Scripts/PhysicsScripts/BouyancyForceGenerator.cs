@@ -28,7 +28,7 @@ public class BouyancyForceGenerator : ForceGenerator2D
             diff *= magnitude;
 
             theObject.accumulatedForces += new Vector2(0.0f, diff);
-            theObject.velocity = (theObject.velocity * waterDampening);
+            theObject.velocity *= waterDampening;
         }
     }
 
