@@ -10,28 +10,38 @@ using UnityEngine;
 
 public class Particle2DContact
 {
-    Particle2D particle1;
-    Particle2D particle2;
+    public Particle2D particle1;
+    public Particle2D particle2;
 
     float restitutionCoefficient = 0.9f;
 
-    float penetration;
-	Vector2 move1DoneForPenetration;
-	Vector2 move2DoneForPenetration;
+    public float penetration;
+	public Vector2 move1;
+	public Vector2 move2;
 
-	Vector2 contactNormal;
+	public Vector2 contactNorm;
 
 	public void setNewVars(Particle2D part1, Particle2D part2, float resCoeff,
-		Vector2 contactNorm, float pen, Vector2 move1, Vector2 move2)
+		Vector2 contactNormal, float pen, Vector2 move1, Vector2 move2)
     {
 		particle1 = part1;
 		particle2 = part2;
 		restitutionCoefficient = resCoeff;
-		contactNormal = contactNorm;
+		contactNorm = contactNormal;
 		penetration = pen;
-		move1DoneForPenetration = move1;
-		move2DoneForPenetration = move2;
+		this.move1 = move1;
+		this.move2 = move2;
     }
+
+	public float CalculateSeparatingVelocity()
+	{
+		Vector2 relativeVel = particle1.velocity;
+		if (particle2)
+		{
+			relativeVel -= particle2.velocity;
+		}
+		return Vector2.Dot(relativeVel, contactNorm);
+	}
 
 	public void Resolve(double dt)
     {
@@ -45,10 +55,10 @@ public class Particle2DContact
 		if (particle2)
 		{
 			relativeVel -= particle2.velocity;
+			contactNorm = particle2.transform.position - particle1.transform.position;
 		}
 
-		contactNormal = particle2.transform.position - particle1.transform.position;
-		float separatingVel = Vector2.Dot(relativeVel, contactNormal);
+		float separatingVel = Vector2.Dot(relativeVel, contactNorm);
 
 		if (separatingVel > 0.0f)//already separating so need to resolve
 			return;
@@ -59,7 +69,7 @@ public class Particle2DContact
 		Vector2 velFromAcc = particle1.acceleration;
 		if (particle2)
 			velFromAcc -= particle2.acceleration;
-		float accCausedSepVelocity = Vector2.Dot(velFromAcc, contactNormal) * (float)dt;
+		float accCausedSepVelocity = Vector2.Dot(velFromAcc, contactNorm) * (float)dt;
 
 		if (accCausedSepVelocity < 0.0f)
 		{
@@ -78,42 +88,44 @@ public class Particle2DContact
 			return;
 
 		float impulse = deltaVel / totalInverseMass;
-		Vector2 impulsePerIMass = contactNormal * impulse;
+		Vector2 impulsePerIMass = contactNorm * impulse;
 
 		Vector2 newVelocity = particle1.velocity + impulsePerIMass * particle1.inverseMass;
 		particle1.velocity = newVelocity;
 		if (particle2)
 		{
 			Vector2 newPart2Velocity = particle2.velocity + impulsePerIMass * -particle2.inverseMass;
-			particle2.velocity = newPart2Velocity;
+			particle2.accumulatedForces += newPart2Velocity;
 		}
 	}
 	void ResolveInterpenetration(double dt)
     {
-		if (penetration <= 0.0f)
-			return;
+        if (penetration <= 0.0f)
+            return;
 
-		float totalInverseMass = particle1.inverseMass;
-		if (particle2)
-			totalInverseMass += particle2.inverseMass;
+        float totalInverseMass = particle1.inverseMass;
+        if (particle2)
+            totalInverseMass += particle2.inverseMass;
 
-		if (totalInverseMass <= 0)//all infinite massed objects
-			return;
+        if (totalInverseMass <= 0)//all infinite massed objects
+            return;
 
-		Vector2 movePerIMass = contactNormal * (penetration / totalInverseMass);
+        Vector2 movePerIMass = contactNorm * (penetration / totalInverseMass);
 
-		move1DoneForPenetration = movePerIMass * particle1.inverseMass;
-		if (particle2)
-			move2DoneForPenetration = movePerIMass * -particle2.inverseMass;
-		else
-			move2DoneForPenetration = new Vector2(0.0f, 0.0f);
+		//Debug.Log("mov per I Mass = " + movePerIMass);
 
-		Vector2 newPosition = new Vector2(particle1.transform.position.x, particle1.transform.position.y) + move1DoneForPenetration;
-		particle1.transform.position = newPosition;
+        move1 = movePerIMass * particle1.inverseMass;
+        if (particle2)
+            move2 = -movePerIMass * particle2.inverseMass;
+        else
+            move2 = new Vector2(0.0f, 0.0f);
+
+        Vector2 newPosition = new Vector2(particle1.transform.position.x, particle1.transform.position.y) + (move1);
+        particle1.transform.position = newPosition;
 		if (particle2)
 		{
-			newPosition = new Vector2(particle2.transform.position.x, particle2.transform.position.y) + move2DoneForPenetration;
-			particle2.transform.position = newPosition;
+		    newPosition = new Vector2(particle2.transform.position.x, particle2.transform.position.y) - (move2);
+		    particle2.transform.position = newPosition;
 		}
 
 	}

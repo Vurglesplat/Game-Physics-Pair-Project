@@ -25,7 +25,7 @@ public class Particle2D : MonoBehaviour
         particleId = ++nextPartId;
         
         acceleration.y = -gravity;
-        Integrator.addToList(this);
+        Integrator.AddToList(this);
         inverseMass = (1.0f / mass);
     }
 

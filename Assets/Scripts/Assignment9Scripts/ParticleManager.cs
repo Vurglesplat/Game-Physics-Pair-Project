@@ -13,8 +13,8 @@ public class ParticleManager : MonoBehaviour
                 if (CollisionDetector.CollisionTest(Integrator.particleList[i], Integrator.particleList[j], 1.3f))
                 {
                     //make sure to remove in this order so you don't shift j around after deleting i
-                    Integrator.removeUnit(Integrator.particleList[j].particleId);
-                    Integrator.removeUnit(Integrator.particleList[i].particleId);
+                    Integrator.RemoveUnit(Integrator.particleList[j].particleId);
+                    Integrator.RemoveUnit(Integrator.particleList[i].particleId);
                 }
             }
         }
