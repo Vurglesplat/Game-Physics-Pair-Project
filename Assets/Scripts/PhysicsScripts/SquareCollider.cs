@@ -8,10 +8,12 @@ public class SquareCollider : MonoBehaviour
     [SerializeField] float height = 0.0f;
     [SerializeField] float width = 0.0f;
 
-    [HideInInspector] public float collisionZoneHeightUpperBound = 0.0f;
-    [HideInInspector] public float collisionZoneHeightLowerBound = 0.0f;
-    [HideInInspector] public float collisionZoneWidthUpperBound = 0.0f;
-    [HideInInspector] public float collisionZoneWidthLowerBound = 0.0f;
+    [HideInInspector] public float collisionTop = 0.0f;
+    [HideInInspector] public float collisionBottom = 0.0f;
+    [HideInInspector] public float collisionRight = 0.0f;
+    [HideInInspector] public float collisionLeft = 0.0f;
+
+    // collision detection was adapted from the example done http://jeffreythompson.org/collision-detection/rect-rect.php 
 
 
     // Start is called before the first frame update
@@ -23,11 +25,11 @@ public class SquareCollider : MonoBehaviour
 
     void FixedUpdate()
     {
-        collisionZoneHeightUpperBound = this.transform.position.y + (height / 2.0f) ;
-        collisionZoneHeightLowerBound = this.transform.position.y - (height / 2.0f) ;
+        collisionTop = this.transform.position.y + (height / 2.0f) ;
+        collisionBottom = this.transform.position.y - (height / 2.0f) ;
         
-        collisionZoneWidthUpperBound = this.transform.position.x + (width / 2.0f) ;
-        collisionZoneWidthLowerBound = this.transform.position.x - (width / 2.0f) ;
+        collisionRight = this.transform.position.x + (width / 2.0f) ;
+        collisionLeft = this.transform.position.x - (width / 2.0f) ;
     }
 
     enum colDirection
@@ -50,14 +52,14 @@ public class SquareCollider : MonoBehaviour
                 bool vertTest = false;
                 float length = 0.0f;
 
-                if (other.transform.position.y > this.transform.position.y
-                    && other.collisionZoneHeightLowerBound < collisionZoneHeightUpperBound) //collision with other above
-                {
-                    //Debug.Log("" + other.collisionZoneHeightLowerBound + '<' + collisionZoneHeightUpperBound);
-                    length += collisionZoneHeightUpperBound - other.collisionZoneHeightLowerBound;
-                    dir = colDirection.OTHER_ABOVE;
-                    vertTest = true;
-                }
+                //if (other.transform.position.y > this.transform.position.y
+                //    && other.collisionZoneHeightLowerBound < collisionZoneHeightUpperBound) //collision with other above
+                //{
+                //    //Debug.Log("" + other.collisionZoneHeightLowerBound + '<' + collisionZoneHeightUpperBound);
+                //    length += collisionZoneHeightUpperBound - other.collisionZoneHeightLowerBound;
+                //    dir = colDirection.OTHER_ABOVE;
+                //    vertTest = true;
+                //}
                 //else if (other.transform.position.y < this.transform.position.y
                 //    && other.collisionZoneHeightUpperBound > collisionZoneHeightLowerBound) // collision with other below
                 //{
@@ -66,25 +68,31 @@ public class SquareCollider : MonoBehaviour
                 //    vertTest = true;
                 //}
 
-                if (other.transform.position.x < this.transform.position.x
-                    && other.collisionZoneWidthUpperBound > collisionZoneWidthLowerBound) // collision with other left
-                {
-                    //dir = colDirection.OTHER_TO_THE_LEFT;
-                    //length += other.collisionZoneWidthUpperBound - collisionZoneWidthLowerBound;
-                    horiTest = true;
-                }
-                else if (other.transform.position.x > this.transform.position.x
-                    && other.collisionZoneWidthLowerBound < collisionZoneWidthUpperBound) // collision with other right
-                {
-                    //dir = colDirection.OTHER_TO_THE_RIGHT;
-                    //length += collisionZoneWidthUpperBound - other.collisionZoneWidthLowerBound;
-                    horiTest = true;
-                }
+                //if (other.transform.position.x < this.transform.position.x
+                //    && other.collisionZoneWidthUpperBound > collisionZoneWidthLowerBound) // collision with other left
+                //{
+                //    //dir = colDirection.OTHER_TO_THE_LEFT;
+                //    //length += other.collisionZoneWidthUpperBound - collisionZoneWidthLowerBound;
+                //    horiTest = true;
+                //}
+                //else if (other.transform.position.x > this.transform.position.x
+                //    && other.collisionZoneWidthLowerBound < collisionZoneWidthUpperBound) // collision with other right
+                //{
+                //    //dir = colDirection.OTHER_TO_THE_RIGHT;
+                //    //length += collisionZoneWidthUpperBound - other.collisionZoneWidthLowerBound;
+                //    horiTest = true;
+                //}
 
-                if (dir != colDirection.NONE && horiTest && vertTest)
+
+                //if (dir != colDirection.NONE && horiTest && vertTest)
+                if ( this.collisionRight  > other.collisionLeft   && 
+                     this.collisionLeft   < other.collisionRight  &&
+                     this.collisionTop    > other.collisionBottom && 
+                     this.collisionBottom < other.collisionTop)
                 {
                     //float length = Vector2.Distance(this.transform.position, other.transform.position);
                     //Debug.Log("length = " + length);
+                    Debug.Log("COLLISION");
                     Debug.Log("contact between " + this.gameObject.name + " and " + other.gameObject.name);
 
                     Vector2 normal = new Vector2(0.0f,0.0f);

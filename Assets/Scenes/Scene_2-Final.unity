@@ -322,7 +322,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 63a4f07e39d0a684aa1c6cf799bce63b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -797,14 +797,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 540615383}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.057389736, y: 0, z: 0, w: 0.9983519}
   m_LocalPosition: {x: 0, y: 0, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 318914974}
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 6.58, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,9 +843,9 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.548
     m_Bias: 0.05
-    m_NormalBias: 0.4
+    m_NormalBias: 0.83
     m_NearPlane: 0.2
     m_CullingMatrixOverride:
       e00: 1
@@ -891,7 +891,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 4.64, y: 14.02, z: -8.05}
   m_LocalScale: {x: 1, y: 1, z: 0.99999994}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1078,7 +1078,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1119986434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1093,10 +1093,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 2
   width: 1
-  collisionZoneHeightUpperBound: 0
-  collisionZoneHeightLowerBound: 0
-  collisionZoneWidthUpperBound: 0
-  collisionZoneWidthLowerBound: 0
+  collisionTop: 0
+  collisionBottom: 0
+  collisionRight: 0
+  collisionLeft: 0
 --- !u!114 &1119986435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1183,10 +1183,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 1
   width: 8
-  collisionZoneHeightUpperBound: 0
-  collisionZoneHeightLowerBound: 0
-  collisionZoneWidthUpperBound: 0
-  collisionZoneWidthLowerBound: 0
+  collisionTop: 0
+  collisionBottom: 0
+  collisionRight: 0
+  collisionLeft: 0
 --- !u!114 &1279261961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1432,10 +1432,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 2
   width: 1
-  collisionZoneHeightUpperBound: 0
-  collisionZoneHeightLowerBound: 0
-  collisionZoneWidthUpperBound: 0
-  collisionZoneWidthLowerBound: 0
+  collisionTop: 0
+  collisionBottom: 0
+  collisionRight: 0
+  collisionLeft: 0
 --- !u!1 &1795136709
 GameObject:
   m_ObjectHideFlags: 0
