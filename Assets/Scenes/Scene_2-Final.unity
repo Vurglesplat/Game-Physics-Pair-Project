@@ -1425,9 +1425,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerParticle: {fileID: 1752377802}
-  moveSpeed: 5000
-  swimmingUpStrength: 200000
-  jumpStrength: 340000
+  moveSpeed: 10000
+  swimmingUpStrength: 400000
+  jumpStrength: 700000
   jumpCollider: {fileID: 1497185239}
   isUnderwater: 0
   anvilToSpawn: {fileID: 3482352416915662132, guid: c461f33e540695749910927870aed32d, type: 3}
