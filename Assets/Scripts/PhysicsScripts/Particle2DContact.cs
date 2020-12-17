@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using DG.Tweening;
 
 /// <summary>
 /// heavily based on code from the previous assignments, which in turn was based on code
@@ -47,15 +48,16 @@ public class Particle2DContact
     {
 		ResolveVelocity(dt);
 		ResolveInterpenetration(dt);
+		CleanUpContacts();
 	}
 
 	void ResolveVelocity(double dt)
     {
 		Vector2 relativeVel = particle1.velocity;
+
 		if (particle2)
 		{
 			relativeVel -= particle2.velocity;
-			contactNorm = particle2.transform.position - particle1.transform.position;
 		}
 
 		float separatingVel = Vector2.Dot(relativeVel, contactNorm);
@@ -65,11 +67,12 @@ public class Particle2DContact
 
 		float newSepVel = -separatingVel * restitutionCoefficient;
 
-
 		Vector2 velFromAcc = particle1.acceleration;
+
 		if (particle2)
 			velFromAcc -= particle2.acceleration;
 		float accCausedSepVelocity = Vector2.Dot(velFromAcc, contactNorm) * (float)dt;
+
 
 		if (accCausedSepVelocity < 0.0f)
 		{
@@ -83,6 +86,7 @@ public class Particle2DContact
 		float totalInverseMass = 1.0f / particle1.inverseMass;
 		if (particle2)
 			totalInverseMass += particle2.inverseMass;
+		
 
 		if (totalInverseMass <= 0)//all infinite massed objects
 			return;
@@ -91,43 +95,57 @@ public class Particle2DContact
 		Vector2 impulsePerIMass = contactNorm * impulse;
 
 		Vector2 newVelocity = particle1.velocity + impulsePerIMass * particle1.inverseMass;
+
 		particle1.velocity = newVelocity;
 		if (particle2)
 		{
 			Vector2 newPart2Velocity = particle2.velocity + impulsePerIMass * -particle2.inverseMass;
-			particle2.accumulatedForces += newPart2Velocity;
+
+			particle2.velocity = newPart2Velocity;
+
 		}
 	}
 	void ResolveInterpenetration(double dt)
     {
-        if (penetration <= 0.0f)
+        if (penetration < 0.0f)
             return;
 
         float totalInverseMass = particle1.inverseMass;
         if (particle2)
-            totalInverseMass += particle2.inverseMass;
+        {
+			totalInverseMass += particle2.inverseMass;
+		}
 
-        if (totalInverseMass <= 0)//all infinite massed objects
+		if (totalInverseMass <= 0)//all infinite massed objects
             return;
 
-        Vector2 movePerIMass = contactNorm * (penetration / totalInverseMass);
+        Vector2 movePerIMass = contactNorm * penetration / totalInverseMass;
 
 		//Debug.Log("mov per I Mass = " + movePerIMass);
 
-        move1 = movePerIMass * particle1.inverseMass;
-        if (particle2)
-            move2 = -movePerIMass * particle2.inverseMass;
+		move1 = (movePerIMass * particle1.inverseMass);
+		if (particle2)
+            move2 = movePerIMass * -particle2.inverseMass;
         else
             move2 = new Vector2(0.0f, 0.0f);
 
         Vector2 newPosition = new Vector2(particle1.transform.position.x, particle1.transform.position.y) + (move1);
-        particle1.transform.position = newPosition;
+		//particle1.transform.position = newPosition;
+		particle1.transform.DOMove(newPosition, 0.05f);
+
 		if (particle2)
 		{
-		    newPosition = new Vector2(particle2.transform.position.x, particle2.transform.position.y) - (move2);
-		    particle2.transform.position = newPosition;
+		    newPosition = new Vector2(particle2.transform.position.x, particle2.transform.position.y) + (move2);
+        particle2.transform.DOMove(newPosition, 0.05f);
+		    //particle2.transform.position = newPosition;
 		}
 
 	}
 
+	void CleanUpContacts()
+    {
+		particle1.particlesInContactWith.Clear();
+		if(particle2)
+			particle2.particlesInContactWith.Clear();
+    }
 }

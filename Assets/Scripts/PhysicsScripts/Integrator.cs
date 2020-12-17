@@ -8,6 +8,7 @@ public static class Integrator
     public static List<Particle2DContact> contactList = new List<Particle2DContact> { };
     public static List<SquareCollider> colliderList = new List<SquareCollider> { };
     public static List<Particle2DLink> particleLinkList = new List<Particle2DLink> { };
+    public static JumpCollider jumpCollider;
     const int NUM_OF_ITERATIONS = 10;
 
     public static void Integrate(double dt)
@@ -27,6 +28,8 @@ public static class Integrator
             currentCollider.CheckForCollision(ref colliderList);
         }
 
+        jumpCollider.jumpBase = null;
+        jumpCollider.CheckForGround(ref colliderList);
         ResolveContacts(dt);
         contactList.Clear();
     }
@@ -49,50 +52,52 @@ public static class Integrator
     }
     static void ResolveContacts(double dt)
     {
-        int mIterationsUsed = 0;
-        while (mIterationsUsed < NUM_OF_ITERATIONS)
-        {
-            float max = 9999999.9f;
-            int numContacts = contactList.Count;
-            int maxIndex = numContacts;
-            for (int i = 0; i < numContacts; i++)
-            {
-                float sepVel = contactList[i].CalculateSeparatingVelocity();
-                if (sepVel < max && (sepVel < 0.0f || contactList[i].penetration > 0.0f))
-                {
-                    max = sepVel;
-                    maxIndex = i;
-                }
-            }
-            if (maxIndex == numContacts)
-                break;
+        foreach (Particle2DContact current in contactList)
+            current.Resolve(dt);
+        //int mIterationsUsed = 0;
+        //while (mIterationsUsed < NUM_OF_ITERATIONS)
+        //{
+        //    float max = 9999999.9f;
+        //    int numContacts = contactList.Count;
+        //    int maxIndex = numContacts;
+        //    for (int i = 0; i < numContacts; i++)
+        //    {
+        //        float sepVel = contactList[i].CalculateSeparatingVelocity();
+        //        if (sepVel < max && (sepVel < 0.0f || contactList[i].penetration > 0.0f))
+        //        {
+        //            max = sepVel;
+        //            maxIndex = i;
+        //        }
+        //    }
+        //    if (maxIndex == numContacts)
+        //        break;
 
-            contactList[maxIndex].Resolve(dt);
+        //    contactList[maxIndex].Resolve(dt);
 
-            for (int i = 0; i < numContacts; i++)
-            {
-                if (contactList[i].particle1 == contactList[maxIndex].particle1)
-                {
-                    contactList[i].penetration -= Vector2.Dot( contactList[maxIndex].move1, contactList[i].contactNorm);
-                }
-                else if (contactList[i].particle1 == contactList[maxIndex].particle2)
-                {
-                    contactList[i].penetration -= Vector2.Dot(contactList[maxIndex].move2, contactList[i].contactNorm);
-                }
+        //    for (int i = 0; i < numContacts; i++)
+        //    {
+        //        if (contactList[i].particle1 == contactList[maxIndex].particle1)
+        //        {
+        //            contactList[i].penetration -= Vector2.Dot( contactList[maxIndex].move1, contactList[i].contactNorm);
+        //        }
+        //        else if (contactList[i].particle1 == contactList[maxIndex].particle2)
+        //        {
+        //            contactList[i].penetration -= Vector2.Dot(contactList[maxIndex].move2, contactList[i].contactNorm);
+        //        }
 
-                if (contactList[i].particle2)
-                {
-                    if (contactList[i].particle2 == contactList[maxIndex].particle1)
-                    {
-                        contactList[i].penetration += Vector2.Dot(contactList[maxIndex].move1, contactList[i].contactNorm);
-                    }
-                    else if (contactList[i].particle2 == contactList[maxIndex].particle2)
-                    {
-                        contactList[i].penetration -= Vector2.Dot(contactList[maxIndex].move2, contactList[i].contactNorm);
-                    }
-                }
-            }
-            mIterationsUsed++;
-        }
+        //        if (contactList[i].particle2)
+        //        {
+        //            if (contactList[i].particle2 == contactList[maxIndex].particle1)
+        //            {
+        //                contactList[i].penetration += Vector2.Dot(contactList[maxIndex].move1, contactList[i].contactNorm);
+        //            }
+        //            else if (contactList[i].particle2 == contactList[maxIndex].particle2)
+        //            {
+        //                contactList[i].penetration -= Vector2.Dot(contactList[maxIndex].move2, contactList[i].contactNorm);
+        //            }
+        //        }
+        //    }
+        //    mIterationsUsed++;
+        //}
     }
 }

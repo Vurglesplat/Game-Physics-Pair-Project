@@ -4,22 +4,19 @@ using UnityEngine;
 
 public class SquareCollider : MonoBehaviour
 {
-    Particle2D thisParticle;
     [SerializeField] float height = 0.0f;
-    [SerializeField] float width = 0.0f;
-
+    public  float width = 0.0f;
+    
+    [HideInInspector] public Particle2D particle;
     [HideInInspector] public float collisionTop = 0.0f;
     [HideInInspector] public float collisionBottom = 0.0f;
     [HideInInspector] public float collisionRight = 0.0f;
     [HideInInspector] public float collisionLeft = 0.0f;
 
-    // collision detection was adapted from the example done http://jeffreythompson.org/collision-detection/rect-rect.php 
-
-
     // Start is called before the first frame update
     void Start()
     {
-        thisParticle = this.gameObject.GetComponent<Particle2D>();
+        particle = this.gameObject.GetComponent<Particle2D>();
         Integrator.colliderList.Add(this);
     }
 
@@ -47,53 +44,61 @@ public class SquareCollider : MonoBehaviour
         {
             if (this.gameObject != other.gameObject)
             {
-                colDirection dir = colDirection.NONE;
-                bool horiTest = false;
-                bool vertTest = false;
                 float length = 0.0f;
 
-                //if (other.transform.position.y > this.transform.position.y
-                //    && other.collisionZoneHeightLowerBound < collisionZoneHeightUpperBound) //collision with other above
-                //{
-                //    //Debug.Log("" + other.collisionZoneHeightLowerBound + '<' + collisionZoneHeightUpperBound);
-                //    length += collisionZoneHeightUpperBound - other.collisionZoneHeightLowerBound;
-                //    dir = colDirection.OTHER_ABOVE;
-                //    vertTest = true;
-                //}
-                //else if (other.transform.position.y < this.transform.position.y
-                //    && other.collisionZoneHeightUpperBound > collisionZoneHeightLowerBound) // collision with other below
-                //{
-                //    dir = colDirection.OTHER_BELOW;
-                //    length += other.collisionZoneHeightUpperBound - collisionZoneHeightLowerBound;
-                //    vertTest = true;
-                //}
-
-                //if (other.transform.position.x < this.transform.position.x
-                //    && other.collisionZoneWidthUpperBound > collisionZoneWidthLowerBound) // collision with other left
-                //{
-                //    //dir = colDirection.OTHER_TO_THE_LEFT;
-                //    //length += other.collisionZoneWidthUpperBound - collisionZoneWidthLowerBound;
-                //    horiTest = true;
-                //}
-                //else if (other.transform.position.x > this.transform.position.x
-                //    && other.collisionZoneWidthLowerBound < collisionZoneWidthUpperBound) // collision with other right
-                //{
-                //    //dir = colDirection.OTHER_TO_THE_RIGHT;
-                //    //length += collisionZoneWidthUpperBound - other.collisionZoneWidthLowerBound;
-                //    horiTest = true;
-                //}
-
+                float topPen = this.collisionTop - other.collisionBottom;
+                float botPen = other.collisionTop - this.collisionBottom;
+                float leftPen = other.collisionRight - this.collisionLeft;
+                float rightPen = this.collisionRight - other.collisionLeft;
 
                 //if (dir != colDirection.NONE && horiTest && vertTest)
-                if ( this.collisionRight  > other.collisionLeft   && 
-                     this.collisionLeft   < other.collisionRight  &&
-                     this.collisionTop    > other.collisionBottom && 
-                     this.collisionBottom < other.collisionTop)
+                if ( topPen > 0.0f &&
+                     botPen > 0.0f &&
+                     leftPen > 0.0f &&
+                     rightPen > 0.0f &&
+                     !particle.particlesInContactWith.Contains(other.particle.particleId))
                 {
                     //float length = Vector2.Distance(this.transform.position, other.transform.position);
                     //Debug.Log("length = " + length);
-                    Debug.Log("COLLISION");
-                    Debug.Log("contact between " + this.gameObject.name + " and " + other.gameObject.name);
+                    
+                    colDirection dir = colDirection.OTHER_ABOVE;
+                    length = topPen;
+
+                    if (botPen < topPen)
+                    {
+                        dir = colDirection.OTHER_BELOW;
+                        length = botPen;
+                    }
+                    if (leftPen < length)
+                    {
+                        dir = colDirection.OTHER_TO_THE_LEFT;
+                        length = leftPen;
+                    }
+                    if (rightPen < length)
+                    {
+                        dir = colDirection.OTHER_TO_THE_RIGHT;
+                        length = rightPen;
+                    }
+                    
+
+                    if (this.gameObject.CompareTag("Player"))
+                    {
+                        if (topPen < botPen && topPen < leftPen && topPen < rightPen)
+                            Debug.Log("Collision from above");
+                        else if (topPen > botPen && botPen < leftPen && botPen < rightPen)
+                            Debug.Log("Collision from below");
+                        else if (rightPen < botPen && rightPen < leftPen && topPen > rightPen)
+                            Debug.Log("Collision from Right");
+                        else
+                            Debug.Log("Collision from left");
+                    }
+
+                    //if (Mathf.Abs(theDiff.x) > Mathf.Abs(theDiff.y))
+                    //{
+                    //    Debug.Log("Collision Vertical because " + Mathf.Abs(theDiff.x) + '>' + Mathf.Abs(theDiff.y));
+                    //}
+                    //else
+                    //    Debug.Log("Collision Horizontal because " + Mathf.Abs(theDiff.x) + '<' + Mathf.Abs(theDiff.y));
 
                     Vector2 normal = new Vector2(0.0f,0.0f);
                     switch(dir)
@@ -120,11 +125,12 @@ public class SquareCollider : MonoBehaviour
                             }
                     }
 
-
-
                     Particle2DContact newContact = new Particle2DContact { };
-                    newContact.setNewVars(this.thisParticle, null, 0.1f, normal, length, new Vector2(0f, 0f), new Vector2(0f, 0f));
+                    newContact.setNewVars(this.particle, other.particle, 0.9f, normal, length, new Vector2(0f, 0f), new Vector2(0f, 0f));
                     Integrator.contactList.Add(newContact);
+
+                    this.particle.particlesInContactWith.Add(other.particle.particleId);
+                    other.particle.particlesInContactWith.Add(this.particle.particleId);
                 }
             }
         }

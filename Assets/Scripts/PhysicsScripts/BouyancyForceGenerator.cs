@@ -6,6 +6,7 @@ public class BouyancyForceGenerator : ForceGenerator2D
 {
     [SerializeField] float waterHeight;
     [SerializeField] float waterResistance;
+    [SerializeField] float widthMultiplier = 1.0f;
     [Range(0.95f, 1f)] [SerializeField] float waterDampening;
 
 
@@ -22,13 +23,19 @@ public class BouyancyForceGenerator : ForceGenerator2D
 
         if (theObject.transform.position.y < waterHeight) // the object is underwater
         {
-            float diff = theObject.transform.position.y - waterHeight;
+            float diff = theObject.transform.position.y - waterHeight ;
 
-            float magnitude = diff * waterResistance;
+
+            float magnitude = diff * waterResistance * theObject.inverseMass * Mathf.Pow(theObject.squareCollider.width, widthMultiplier);
             diff *= magnitude;
 
             theObject.accumulatedForces += new Vector2(0.0f, diff);
             theObject.velocity *= waterDampening;
+
+            if(theObject.gameObject.CompareTag("Player"))
+            {
+                theObject.GetComponent<PlatformPlayerControls>().isUnderwater = true;
+            }
         }
     }
 

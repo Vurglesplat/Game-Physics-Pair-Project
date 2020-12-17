@@ -13,4 +13,8 @@ public class Timer : MonoBehaviour
         Integrator.Integrate(Time.deltaTime);
         Time.timeScale = timeScale;
     }
+
+    void Awake()
+    {
+    }
 }
