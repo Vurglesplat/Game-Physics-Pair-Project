@@ -79,19 +79,6 @@ public class SquareCollider : MonoBehaviour
                         dir = colDirection.OTHER_TO_THE_RIGHT;
                         length = rightPen;
                     }
-                    
-
-                    if (this.gameObject.CompareTag("Player"))
-                    {
-                        if (topPen < botPen && topPen < leftPen && topPen < rightPen)
-                            Debug.Log("Collision from above");
-                        else if (topPen > botPen && botPen < leftPen && botPen < rightPen)
-                            Debug.Log("Collision from below");
-                        else if (rightPen < botPen && rightPen < leftPen && topPen > rightPen)
-                            Debug.Log("Collision from Right");
-                        else
-                            Debug.Log("Collision from left");
-                    }
 
                     //if (Mathf.Abs(theDiff.x) > Mathf.Abs(theDiff.y))
                     //{

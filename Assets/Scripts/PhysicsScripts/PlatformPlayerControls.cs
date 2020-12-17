@@ -9,7 +9,10 @@ public class PlatformPlayerControls : MonoBehaviour
     [SerializeField] float swimmingUpStrength;
     [SerializeField] float jumpStrength;
     [SerializeField] JumpCollider jumpCollider;
+
     public bool isUnderwater = false;
+
+    [SerializeField] GameObject anvilToSpawn;
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +48,13 @@ public class PlatformPlayerControls : MonoBehaviour
 
             }
             
+        }
+
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            Vector3 overhead = transform.position + new Vector3(0.0f, 15.0f);
+
+            GameObject.Instantiate(anvilToSpawn, overhead,Quaternion.identity);
         }
 
         isUnderwater = false;
